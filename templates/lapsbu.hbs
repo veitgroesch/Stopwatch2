@@ -1,0 +1,118 @@
+<div id="menu" class="well well-sm">
+    <div id="login">
+        Anmelden:
+        {{input type='password' value=password placeholder="Passwort"}}
+    </div>
+
+    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
+    {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
+    &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
+    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    {{#if admin}}
+        &nbsp;
+        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+    {{/if}}
+</div>
+
+<table class="table table-striped table-hover lapTable">
+    <thead>
+    <tr>
+        <th></th>
+        <th colspan="2" style="text-align: center">Setzrunde</th>
+        {{#each labels}}
+            <th>{{label}}</th>
+        {{/each}}
+        <th>Delta</th>
+        <th>Geschwindigkeit</th>
+        <th colspan="2" class="nodisplay">Gesamtwertung</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody {{bind-attr class=tbodyClass}}>
+    {{#each groupedResults}}
+        <tr>
+            <td colspan="12" class="group"><strong>Klasse {{group}} - {{nameLauf}}</strong></td>
+        </tr>
+        {{#each race in races}}
+            <tr>
+                <td class="startnummer"><strong>{{race.position}})</strong></td>
+                <td class="startnummer"><strong>{{race.startnummer}}</strong></td>
+                {{#each lap in race.laps}}
+                    {{#if lap.runde}}
+                        {{#unless lap.empty}}
+                            {{#if lap.gueltig}}
+                            <td>
+                                {{lap.laptime}}&nbsp;s
+                                {{#if ../../../../../../tbodyLineBreak}}
+                                    <br>
+                                {{else}}
+                                    &bull;
+                                {{/if}}
+                                &#916;={{lap.delta}}&nbsp;s
+                            {{else}}
+                            <td class="ungueltig">
+                                <div class="nodisplay">
+                                    {{lap.laptime}}&nbsp;s
+                                    {{#if ../../../../../../tbodyLineBreak}}
+                                        <br>
+                                    {{else}}
+                                        &bull;
+                                    {{/if}}
+                                    &#916;={{lap.delta}}&nbsp;s
+                                </div>
+                            {{/if}}
+
+                            {{#if ../../../../../admin}}
+                                &nbsp;<input
+                                    type="checkbox" {{bind-attr checked=lap.checked}} {{action toggleCheckbox lap}}>
+                                <br>
+                                <button class="btn btn-sm btn-warning" {{action decrease lap}}
+                                        title="0.1s nach links">
+                                    -
+                                </button>
+                                {{#if lap.isNotLast}}
+                                    <button class="btn btn-sm btn-warning" {{action split lap}} title="Zeit splitten">
+                                        &#x2702;
+                                    </button>
+                                {{/if}}
+                                <button class="btn btn-sm btn-warning" {{action increase lap}}
+                                        title="0.1s nach rechts">
+                                    +
+                                </button>
+                            {{/if}}
+                        </td>
+                        {{else}}
+                            <td>
+                                {{lap.runde}}
+                            </td>
+                        {{/unless}}
+                    {{else}}
+                        <td>
+                            {{lap.laptime}}&nbsp;s
+                        </td>
+                    {{/if}}
+                {{/each}}
+                <td>
+                    <strong>&#916; = {{race.meanDelta}}&nbsp;s</strong>
+                </td>
+                <td>
+                    <strong>v = {{race.velocity}}&nbsp;km/h</strong>
+                </td>
+                <td class="nodisplay">
+                    <strong>{{{race.winnerPositionName}}}</strong>
+                </td>
+                <td class="nodisplay">
+                    {{#if race.winnerDelta}}
+                        &#916;&nbsp=&nbsp{{race.winnerDelta}}&nbsp;s
+                    {{/if}}
+                </td>
+                <td>
+                    {{#if ../../admin}}
+                        <button class="btn btn-danger btn-sm" {{action deleteStartnummer race}}>&cross;</button>
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
+    {{/each}}
+    </tbody>
+</table>

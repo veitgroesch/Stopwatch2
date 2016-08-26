@@ -1,0 +1,61 @@
+<div {{bind-attr id='stopWatchId'}} class="panel panel-default stopwatch-panel">
+    <div class="panel-heading">
+        Startnummer: {{input type='text' placeholder="Startnummer" value=startnummer disabled=inputDisabled}}</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8 col-sm-8 col-xs-8 col-buttons">
+                <div class="stopwatch-buttons">
+                    <button {{bind-attr disabled="notRunning"}} class="btn btn-danger btn-sm" {{action 'stop'}}>Stopp
+                    </button>
+                    <button {{bind-attr disabled="running"}} class="btn btn-danger btn-sm" {{action 'new'}}>Neu</button>
+                    <button {{bind-attr disabled="backDisabled"}} class="btn btn-warning btn-sm" {{action 'back'}}>
+                        Zurück
+                    </button>
+                </div>
+                <div class="stopwatch-buttons">
+
+                    {{#if running}}
+                        <button disabled="true" class="stopwatch-time btn btn-success" {{action 'start'}}>
+                            {{time}} sec
+                        </button>
+                    {{else}}
+                        {{#if startnummerEingegeben}}
+                            <button disabled="true" class="stopwatch-time btn btn-primary">0.0 sec</button>
+                        {{else}}
+                            <button disabled="true" class="stopwatch-time btn btn-primary">
+                                Startnummer eingeben!
+                            </button>
+                        {{/if}}
+                        </button>
+                    {{/if}}
+                </div>
+
+                <div class="stopwatch-lapbutton">
+                    {{#if running}}
+                        <button {{bind-attr class="lapButtonBackground"}} {{bind-attr disabled="lapButtonDisabled"}}
+                                class="btn btn-primary" {{action 'lap'}}>{{startnummer}}</button>
+                    {{else}}
+                        {{#if startnummerEingegeben}}
+                            <button class="background-green"
+                                    class="btn btn-primary" {{action 'start'}}>{{startnummer}}</button>
+                        {{else}}
+                            <button class="background-red"  disabled="true"
+                                    class="btn btn-primary">{{startnummer}}</button>
+                        {{/if}}
+                        </button>
+                    {{/if}}
+                </div>
+
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-4 col-laps">
+                <div class="stopwatch-laptimes panel panel-default">
+                    <ul class="lapList">
+                        {{#each flap in flaps}}
+                            <li> #{{flap.runde}}: <strong>{{flap.laptime}} s</strong></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

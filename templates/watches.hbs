@@ -1,0 +1,29 @@
+<div id="nlauf">
+    {{view "Ember.Select"
+    content=laeufe
+    optionValuePath="content.id"
+    optionLabelPath="content.name"
+    value=nlauf}}
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch1" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch2" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch3" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch4" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch5" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+    <div class="col-md-4">
+        {{stop-watch stopWatchId="idWatch6" saveNewRecord="saveNewRecord" delete="delete"}}
+    </div>
+</div>

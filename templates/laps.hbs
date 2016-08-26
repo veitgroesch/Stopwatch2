@@ -1,0 +1,98 @@
+<div id="menu" class="well well-sm">
+    <div id="login">
+        Anmelden:
+        {{input type='password' value=password placeholder="Passwort"}}
+    </div>
+
+    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
+    {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
+    &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
+    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    &nbsp;{{input type="checkbox" checked=sortByDelta}} Nach Delta sortieren
+    {{#if admin}}
+        &nbsp;
+        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+    {{/if}}
+</div>
+
+<table class="table table-striped table-hover lapTable">
+
+    <tbody {{bind-attr class=tbodyClass}}>
+    {{#each result in groupedResults}}
+        <tr>
+            <td class="startnummer"><strong>{{result.startnummer}}</strong></td>
+            {{#each lap in result.laps}}
+                {{#unless lap.empty}}
+                    {{#if lap.gueltig}}
+                        {{#if lap.isSetzrunde}}
+                            <td class="setzrunde">
+                        {{else}}
+                            <td>
+                        {{/if}}
+                        {{lap.laptime}}&nbsp;s
+                        {{#if ../../../../tbodyLineBreak}}
+                            <br>
+                        {{else}}
+                            &bull;
+                        {{/if}}
+                        {{#unless lap.isSetzrunde}}
+                            &#916;={{lap.delta}}&nbsp;s
+                        {{else}}
+                            Setzrunde
+                        {{/unless}}
+                        {{#if ../../../../admin}}
+                            &nbsp;<input
+                                type="checkbox" {{bind-attr checked=lap.checked}} {{action toggleCheckbox lap}}>
+                            <br>
+                            <button class="btn btn-sm btn-warning" {{action decrease lap}}
+                                    title="0.1s nach links">
+                                -
+                            </button>
+                            <button class="btn btn-sm btn-warning" {{action split lap}} title="Zeit splitten">
+                                &#x2702;
+                            </button>
+                            <button class="btn btn-sm btn-warning" {{action increase lap}}
+                                    title="0.1s nach rechts">
+                                +
+                            </button>
+                        {{/if}}
+
+                    {{else}}
+                    <td class="ungueltig">
+                        {{lap.laptime}}&nbsp;s
+                        {{#if ../../../../tbodyLineBreak}}
+                            <br>
+                        {{else}}
+                            &bull;
+                        {{/if}}
+                        {{#unless lap.isSetzrunde}}
+                            &#916;={{lap.delta}}&nbsp;s
+                        {{/unless}}
+
+                        {{#if ../../../../admin}}
+                            &nbsp;<input
+                                type="checkbox" {{bind-attr checked=lap.checked}} {{action toggleCheckbox lap}}>
+                        {{/if}}
+                    {{/if}}
+
+
+                </td>
+                {{else}}
+                    <td>
+                        {{lap.runde}}
+                    </td>
+                {{/unless}}
+            {{/each}}
+
+            <td>
+                <strong>&#916; = {{result.meanDelta}}&nbsp;s</strong>
+            </td>
+            <td>
+                {{#if ../admin}}
+                    <button class="btn btn-danger btn-sm" {{action deleteStartnummer result}}>&cross;</button>
+                {{/if}}
+            </td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

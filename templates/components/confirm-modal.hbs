@@ -1,0 +1,18 @@
+<div {{bind-attr id='modalId'}} class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">{{{title}}}</h2>
+            </div>
+            <div class="modal-body">
+                {{{text}}}
+            </div>
+            <div class="modal-footer">
+                {{#if showCancel}}
+                    <button {{action 'cancel'}} class="btn btn-default" data-dismiss="modal">{{buttonCancel}}</button>
+                {{/if}}
+                <button {{action 'ok'}} class="btn btn-primary btnOk" data-dismiss="modal">{{buttonOK}}</button>
+            </div>
+        </div>
+    </div>
+</div>

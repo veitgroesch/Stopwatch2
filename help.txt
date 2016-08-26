@@ -1,0 +1,11 @@
+https://www.youtube.com/watch?v=kPaHt_F3VcU
+
+nodejs installieren
+package.json erstellen: dependencies für grunt
+gruntfile.js erstellen: wie soll grunt die Anwendung zusammensetzen
+copy tasks folder
+name in package.json ändern - ebenfalls in index (name.js)
+:npm install -g grunt-cli
+:npm install
+:grunt dist
+:grunt
