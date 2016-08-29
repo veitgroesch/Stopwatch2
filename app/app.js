@@ -143,9 +143,13 @@ App = Ember.Application.create({
 
                 var hasToken = result.findBy('token', token);
                 if (!hasToken) {
+                    var error = (item.get('error') === 1);
+                    var abort = (item.get('abort') === 1);
                     result.pushObject(Ember.Object.create({
                         token: token,
                         startnummer: startnummer,
+                        error: error,
+                        abort: abort,
                         laps: []
                     }));
                 }
@@ -475,7 +479,8 @@ App.Lap = DS.Model.extend({
     car: DS.attr(),
     year: DS.attr(),
     date: DS.attr(),
-    status: DS.attr()
+    error: DS.attr(),
+    abort: DS.attr()
 });
 
 App.Router.map(function () {

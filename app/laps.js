@@ -173,7 +173,44 @@ App.LapsController = Ember.ArrayController.extend({
                     that.set('toggled', true);
                 });
             }
+        },
+        toggleError: function (item) {
+            if (item) {
+                var that = this;
+                var token = item.get('token');
+                var lap = this.store.find('lap').then(function (laps) {
+                    console.log('laps', laps);
+                    laps.filterBy('token', token).forEach(function(lap){
+                        if (lap.get('error') === 1) {
+                            lap.set('error', 0);
+                        } else {
+                            lap.set('error', 1);
+                        }
+                        lap.save();
+                        that.set('toggled', true);
+                    });
+                });
+            }
+        },
+        toggleAbort: function (item) {
+            if (item) {
+                var that = this;
+                var token = item.get('token');
+                var lap = this.store.find('lap').then(function (laps) {
+                    console.log('laps', laps);
+                    laps.filterBy('token', token).forEach(function(lap){
+                        if (lap.get('abort') === 1) {
+                            lap.set('abort', 0);
+                        } else {
+                            lap.set('abort', 1);
+                        }
+                        lap.save();
+                        that.set('toggled', true);
+                    });
+                });
+            }
         }
+
     }
 });
 

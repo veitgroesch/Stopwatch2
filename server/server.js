@@ -145,8 +145,19 @@ app.put('/api/laps/:id', function (req, res) {
                 console.log('error: Database UPDATE');
                 throw err;
             } else {
-                io.emit('changedata', req.params.id);
-                res.status(httpStatus.OK).end();
+                var sql = "UPDATE `status` SET `error`=" + lap.error
+                    + ",  `abort`=" + lap.abort
+                    + " WHERE `token`=" + lap.token;
+                connection.query(sql,
+                    function (err, rows, fields) {
+                        if (err) {
+                            console.log('error: Database UPDATE');
+                            throw err;
+                        } else {
+                            io.emit('changedata', req.params.id);
+                            res.status(httpStatus.OK).end();
+                        }
+                    });
             }
         });
 });
@@ -166,7 +177,9 @@ app.delete('/api/laps/:id', function (req, res) {
 });
 
 app.get('/api/laps/:id', function (req, res) {
-    var sql = "SELECT * FROM laps WHERE `id`=" + req.params.id;
+    var sql = "SELECT laps.id, laps.startnummer, laps.token, laps.nlauf, laps.laptime, " +
+        "laps.gueltig, laps.date, status.error, status.abort FROM laps " +
+        " INNER JOIN status ON laps.token=status.token WHERE laps.id=" + req.params.id;
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {
@@ -181,7 +194,7 @@ app.get('/api/laps/:id', function (req, res) {
 
 app.get('/api/laps', function (req, res) {
     var sql = "SELECT laps.id, laps.startnummer, laps.token, laps.nlauf, laps.laptime, " +
-        "laps.gueltig, laps.date, cars.year, cars.name, cars.car, status.status " +
+        "laps.gueltig, laps.date, cars.year, cars.name, cars.car, status.error, status.abort " +
         "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer " +
         "INNER JOIN status ON laps.token=status.token;";
     connection.query(sql,

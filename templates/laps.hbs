@@ -88,6 +88,10 @@
                 <strong>&#916; = {{result.meanDelta}}&nbsp;s</strong>
             </td>
             <td>
+                <input type="checkbox" {{bind-attr checked=result.error}} {{action toggleError result}}> Fehler<br>
+                <input type="checkbox" {{bind-attr checked=result.abort}} {{action toggleAbort result}}> Abbruch
+            </td>
+            <td>
                 {{#if ../admin}}
                     <button class="btn btn-danger btn-sm" {{action deleteStartnummer result}}>&cross;</button>
                 {{/if}}
