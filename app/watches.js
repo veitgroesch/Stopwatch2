@@ -18,16 +18,15 @@ App.WatchesRoute = Ember.Route.extend({
 
 App.WatchesController = Ember.ArrayController.extend({
     dataDeleted: false,
-    laeufe: [
-        {name: "Trainingslauf", id: 0},
-        {name: "1.Wertungslauf", id: 1},
-        {name: "2.Wertungslauf", id: 2},
-        {name: "3.Wertungslauf", id: 3},
-        {name: "4.Wertungslauf", id: 4},
-        {name: "5.Wertungslauf", id: 5}
-    ],
-    nlauf: 0,
-
+    races: [],
+    nlauf: 1,
+    init: function () {
+        var n = App.get('NUMBER_RACES');
+        for (var i = 1; i <= n; i++) {
+            this.get('races').push(
+                {name: i + ". Lauf", id: i});
+        }
+    },
     actions: {
         saveNewRecord: function (newLap) {
             var newLapData = this.store.createRecord('lap');
@@ -51,4 +50,5 @@ App.WatchesController = Ember.ArrayController.extend({
             toDelete.save();
         }
     }
-});
+})
+;

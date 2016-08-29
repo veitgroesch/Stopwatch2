@@ -1,5 +1,5 @@
 App.WinnersController = Ember.ArrayController.extend({
-    password: null,
+    password: App.get('PASSWORD'),
     admin: function () {
         return this.get('password') === App.get('PASSWORD');
     }.property('password'),
@@ -9,24 +9,30 @@ App.WinnersController = Ember.ArrayController.extend({
     }.property('tbodyLargeFont'),
     tbodyLargeFont: true,
 
+    lastRace: false,
+    minRaces: 0,
     filtersn: '',
-    sortProperties: ['group'],
-    sortAscending: false,
-
     changed: false,
 
     groupedResults: function () {
-        return App.get('utils').getWinnerList(this.get('filteredContent'));
+        return App.get('utils').processWinners(
+            this.get('filteredContent'),
+            this.get('lastRace'),
+            this.get('minRaces'));
     }.property('filteredContent'),
 
     filteredContent: function () {
         this.set('changed', false);
         var rxsn = new RegExp(this.get('filtersn'), 'gi');
         var laps = this.get('arrangedContent');
-        return laps.filter(function (lap) {
-            return lap.get('startnummer').substring(0, 1).match(rxsn);
-        });
-    }.property('arrangedContent', 'filtersn', 'content.length', 'changed'),
+        if (this.get('filtersn') === "") {
+            return [];
+        } else {
+            return laps.filter(function (lap) {
+                return lap.get('startnummer').substring(0, 1).match(rxsn);
+            });
+        }
+    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed'),
 
     actions: {
         createCSV: function () {
@@ -92,7 +98,7 @@ App.WinnersRoute = Ember.Route.extend({
             });
         },
         didTransition: function (transition, originRoute) {
-            this.controller.set('filtersn', '');
+            this.controller.set('filtersn', '1');
             return true;
         }
     }

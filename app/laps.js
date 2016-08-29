@@ -17,16 +17,6 @@ App.LapsController = Ember.ArrayController.extend({
     sortByDelta: false,
     toggled: false,
 
-    labels: function () {
-        var result = [];
-        for (var i = 1; i <= App.get('NUMBER_LAPS'); i++) {
-            result.pushObject(Ember.Object.create({
-                label: i + ". Runde"
-            }));
-        }
-        return result;
-    }.property('content'),
-
     groupedResults: function () {
         return App.get('utils').processLaps(this.get('filteredContent'), this.get('sortByDelta'));
     }.property('filteredContent', 'admin', 'sortByDelta'),

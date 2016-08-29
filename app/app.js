@@ -1,5 +1,6 @@
 App = Ember.Application.create({
     LOG_TRANSITIONS: true,
+    NUMBER_RACES: 6,
     NUMBER_LAPS: 6,
     PASSWORD: 'cmd',
     LENGTH_COURSE: 2100, //Länge des Kurses
@@ -104,9 +105,34 @@ App = Ember.Application.create({
             });
             return result.sortBy('group');
         },
+        processWinners: function (filteredContent, lastRace, minRaces) {
+            var result = [];
+            filteredContent.forEach(function (item) {
+                // group data on Startnummer
+                var startnummer = item.get('startnummer');
+
+                var hasStartnummer = result.findBy('startnummer', startnummer);
+                if (!hasStartnummer) {
+                    result.pushObject(Ember.Object.create({
+                        startnummer: startnummer,
+                        position: 0,
+                        name: item.get('name'),
+                        car: item.get('car'),
+                        year: item.get('year'),
+                        delta: 0,
+                        velocity: 0,
+                        filename: '',
+                        nRaces: 0,
+                        LastRace: false,
+                        races: []
+                    }));
+                }
+                result.findBy('startnummer', startnummer).get('races').pushObject(item);
+            });
+            return result;
+        },
         processLaps: function (filteredContent, sortByDelta) {
             var result = [];
-            var that = this;
             filteredContent.forEach(function (item) {
                 // for the checkboxes
                 item.set('checked', item.get('gueltig') === 1);
@@ -142,9 +168,9 @@ App = Ember.Application.create({
                     var delta = Math.round((item.get('laptime') - setzrunde) * 10) / 10;
                     item.set('delta', delta);
                     item.set('isSetzrunde', isSetzrunde);
-                    if (item.get('gueltig')  && !isSetzrunde) {
+                    if (item.get('gueltig') && !isSetzrunde) {
                         sumDelta += Math.abs(delta);
-                        nDelta ++;
+                        nDelta++;
                     }
                 });
                 for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
@@ -153,7 +179,7 @@ App = Ember.Application.create({
                         runde: '---'
                     }));
                 }
-                race.set('meanDelta', Math.round(sumDelta/nDelta * 10) / 10);
+                race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
             });
 //            console.log('result', result);
             if (sortByDelta) {

@@ -5,6 +5,8 @@
     </div>
 
     {{input type="text" placeholder='Klasse filtern' value=filtersn}}
+    {{input type="checkbox" checked=lastRace}} Letzter Lauf gefahren
+    {{input type="text" placeholder='Mindestanzahl Läufe' value=minRaces}}
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
         &nbsp;
@@ -26,30 +28,26 @@
     </tr>
     </thead>
     <tbody {{bind-attr class=tbodyClass}}>
-    {{#each groupedResults}}
+
+    {{#each car in groupedResults}}
         <tr>
-            <td colspan="8" class="group"><strong>Klasse {{group}}</strong></td>
+            <td class="startnummer"><strong>{{car.position}})</strong></td>
+            <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
+            <td class="startnummer"><strong>{{car.name}}</strong></td>
+            <td class="startnummer"><strong>{{car.car}}</strong></td>
+            <td class="startnummer"><strong>{{car.year}}</strong></td>
+            <td>
+                <strong>&#916; = {{car.delta}}&nbsp;s</strong>
+            </td>
+            <td>
+                <strong>v = {{car.velocity}}&nbsp;km/h</strong>
+            </td>
+            <td class="winnerImage">
+                {{#if car.filename}}
+                    <img width="150" {{bind-attr src=car.filename}}>
+                {{/if}}
+            </td>
         </tr>
-        {{#each car in cars}}
-            <tr>
-                <td class="startnummer"><strong>{{car.position}})</strong></td>
-                <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
-                <td class="startnummer"><strong>{{car.name}}</strong></td>
-                <td class="startnummer"><strong>{{car.car}}</strong></td>
-                <td class="startnummer"><strong>{{car.year}}</strong></td>
-                <td>
-                    <strong>&#916; = {{car.delta}}&nbsp;s</strong>
-                </td>
-                <td>
-                    <strong>v = {{car.velocity}}&nbsp;km/h</strong>
-                </td>
-                <td class="winnerImage">
-                    {{#if car.filename}}
-                        <img width="150" {{bind-attr src=car.filename}}>
-                    {{/if}}
-                </td>
-            </tr>
-        {{/each}}
     {{/each}}
     </tbody>
 </table>
