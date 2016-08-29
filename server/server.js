@@ -8,6 +8,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var NUMBER_LAPS = 6;
+
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('disconnect', function () {
@@ -45,10 +47,10 @@ app.use(bodyParser.urlencoded({
 app.post('/api/laps', function (req, res) {
     var data = req.body;
     var startnummer = data.lap.startnummer;
-    var sql = "INSERT INTO laps (startnummer, token, runde, nlauf, laptime, date) VALUES ('" +
+    var token = data.lap.token;
+    var sql = "INSERT INTO laps (startnummer, token, nlauf, laptime, date) VALUES ('" +
         startnummer +
-        "', '" + data.lap.token +
-        "', '" + data.lap.runde +
+        "', '" + token +
         "', '" + data.lap.nlauf +
         "', '" + data.lap.laptime +
         "', '" + data.lap.date + "')";
@@ -60,6 +62,31 @@ app.post('/api/laps', function (req, res) {
             } else {
                 var id = rows.insertId;
                 data.lap.id = id;
+                //Falls mehr als NUMBER_LAPS Einträge, überflüssigen löschen
+                var sql = "SELECT id FROM laps WHERE `token`='" + token + "' ORDER BY date";
+                connection.query(sql,
+                    function (err, rows, fields) {
+                        if (err) {
+                            console.log('error: Database Select');
+                            throw err;
+                        } else {
+                            if (rows.length > NUMBER_LAPS + 1) {
+                                var idToDelete = rows[rows.length-1].id;
+                                var sql = "DELETE FROM laps WHERE id=" + idToDelete;
+                                connection.query(sql,
+                                    function (err, rows, fields) {
+                                        if (err) {
+                                            console.log('error: Database DELETE');
+                                            throw err;
+                                        } else {
+                                            console.log('emit', idToDelete);
+                                            io.emit('deldata', idToDelete);
+                                        }
+                                    });
+                            }
+                        }
+                    });
+
                 io.emit('newdata', {});
                 res.status(httpStatus.CREATED).json(data);
             }
@@ -74,6 +101,26 @@ app.post('/api/laps', function (req, res) {
                 if (rows.length == 0) {
                     var sql = "INSERT INTO cars (startnummer, year, name, car) VALUES ('" +
                         startnummer + "', 'NN', 'NN', 'NN')";
+                    connection.query(sql,
+                        function (err, rows, fields) {
+                            if (err) {
+                                console.log('error: Database INSERT');
+                                throw err;
+                            }
+                        });
+                }
+            }
+        });
+    var sql = "Select * from status where `token`='" + token + "'";
+    connection.query(sql,
+        function (err, rows, fields) {
+            if (err) {
+                console.log('error: Database Select');
+                throw err;
+            } else {
+                if (rows.length == 0) {
+                    var sql = "INSERT INTO status (token) VALUES ('" +
+                        token + "')";
                     connection.query(sql,
                         function (err, rows, fields) {
                             if (err) {
@@ -133,9 +180,10 @@ app.get('/api/laps/:id', function (req, res) {
 });
 
 app.get('/api/laps', function (req, res) {
-    var sql = "SELECT laps.id, laps.runde, laps.startnummer, laps.token, laps.nlauf, laps.laptime, " +
-        "laps.gueltig, laps.date, cars.year, cars.name, cars.car " +
-        "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer;";
+    var sql = "SELECT laps.id, laps.startnummer, laps.token, laps.nlauf, laps.laptime, " +
+        "laps.gueltig, laps.date, cars.year, cars.name, cars.car, status.status " +
+        "FROM laps INNER JOIN cars ON laps.startnummer=cars.startnummer " +
+        "INNER JOIN status ON laps.token=status.token;";
     connection.query(sql,
         function (err, rows, fields) {
             if (err) {

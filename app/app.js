@@ -139,7 +139,7 @@ App = Ember.Application.create({
                 // group data on token
                 var token = item.get('token');
                 var startnummer = item.get('startnummer');
-                var runde = item.get('runde');
+                var date = item.get('date');
 
                 var hasToken = result.findBy('token', token);
                 if (!hasToken) {
@@ -152,7 +152,7 @@ App = Ember.Application.create({
                 result.findBy('token', token).get('laps').pushObject(item);
             });
             result.forEach(function (race) {
-                race.set('laps', race.get('laps').sortBy('runde'));
+                race.set('laps', race.get('laps').sortBy('date'));
                 var setzrunde = 0;
                 var m = 0; // number items for display
                 var sumDelta = 0;
@@ -175,8 +175,7 @@ App = Ember.Application.create({
                 });
                 for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
                     race.get('laps').pushObject(Ember.Object.create({
-                        empty: true,
-                        runde: '---'
+                        empty: true
                     }));
                 }
                 race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
@@ -469,14 +468,14 @@ App.ApplicationAdapter = DS.RESTAdapter.extend({
 App.Lap = DS.Model.extend({
     startnummer: DS.attr(),
     token: DS.attr(),
-    runde: DS.attr(),
     nlauf: DS.attr(),
     gueltig: DS.attr(),
     laptime: DS.attr(),
     name: DS.attr(),
     car: DS.attr(),
     year: DS.attr(),
-    date: DS.attr()
+    date: DS.attr(),
+    status: DS.attr()
 });
 
 App.Router.map(function () {

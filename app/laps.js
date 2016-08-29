@@ -104,68 +104,28 @@ App.LapsController = Ember.ArrayController.extend({
                     return;
                 }
                 var token = item.get('token');
-                var round = item.get('runde');
                 var nlauf = item.get('nlauf');
-                var rounds = this.filterBy('token', token);
-                var name = item.get('name');
-                var car = item.get('car');
-                var year = item.get('year');
-                var that = this;
+                var date = item.get('date');
                 var startnummer = item.get('startnummer');
-                var laps = [];
-                rounds.forEach(function (rec) {
-                    laps[rec.get('runde')] = rec;
-                }, this);
-                for (var i = laps.length; i <= App.get('NUMBER_LAPS'); i++) {
-                    laps[i] = null;
-                }
-                var toSplit = laps[round];
-                var newTime = Math.round(toSplit.get('laptime') * 5) / 10;
-                var newDelta = Math.round((toSplit.get('delta') - newTime) * 10) / 10;
+                var that = this;
+
+                var newTime = Math.round(item.get('laptime') * 5) / 10;
 
                 Ember.run.once(this, function () {
-                    toSplit.set('laptime', newTime);
-                    toSplit.set('delta', newDelta);
-                    toSplit.save();
+                    item.set('laptime', newTime);
+                    item.save();
                 });
-                var nextTime = newTime;
-                var nextDelta = newDelta;
-                var weiter = true;
-                var lastRunde;
-                laps.forEach(function (r) {
-                    if (weiter) {
-                        if (r && r.get('runde') > round) {
-                            var time = nextTime;
-                            lastRunde = r.get('runde');
-                            nextTime = r.get('laptime');
-                            nextDelta = r.get('delta');
-                            console.log('times', time, nextTime);
-                            var delta = Math.round((r.get('delta') - nextTime + time) * 10) / 10;
-                            Ember.run.once(this, function () {
-                                r.set('laptime', time);
-                                r.set('delta', delta);
-                                r.save();
-                            });
-                        } else if (!r) {
-                            weiter = false;
-                            Ember.run.once(this, function () {
-                                var newRecord = that.store.createRecord('lap', {
-                                    token: token,
-                                    nlauf: nlauf,
-                                    startnummer: startnummer,
-                                    runde: lastRunde + 1,
-                                    laptime: nextTime,
-                                    delta: nextDelta,
-                                    gueltig: 1,
-                                    name: name,
-                                    car: car,
-                                    year: year
-                                });
-                                newRecord.save();
-                            });
-                        }
-                    }
-                }, this);
+                Ember.run.once(this, function () {
+                    var newRecord = that.store.createRecord('lap', {
+                        token: token,
+                        nlauf: nlauf,
+                        startnummer: startnummer,
+                        laptime: newTime,
+                        gueltig: 1,
+                        date: date
+                    });
+                    newRecord.save();
+                });
             }
         },
         decrease: function (item) {
