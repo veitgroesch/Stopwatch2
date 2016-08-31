@@ -10,7 +10,7 @@
 /* Übersichtsseite */
 
 @media print {
-    #menu {
+    .menu {
         display: none;
     }
     .nodisplay {
@@ -23,24 +23,27 @@
     float: right;
 }
 
-#menu {
+.menu {
     font-size: 16px;
     color: #31708f;
     line-height: 26px;
 }
 
-#menu input[type="text"], #menu input[type="password"] {
+.menu input[type="text"], .menu input[type="password"] {
     padding-left: 5px;
     width: 120px;
 }
 
 /* winners */
 
-select[multiple] {
+#winnersMenu2 select[multiple] {
     height: 42px !important;
+    width: 80px;
     margin-bottom: -12px;
 }
-
+#winnersMenu1 .input, #winnersMenu2 .input, #lapMenu .input{
+    width: 70px;
+}
 /* Messungen */
 
 .lapTable .group {

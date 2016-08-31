@@ -9,24 +9,24 @@ App.WinnersController = Ember.ArrayController.extend({
     }.property('tbodyLargeFont'),
     tbodyLargeFont: true,
 
-    racesToCountNames: [
-        {id: 1, name: 'Lauf 1'},
-        {id: 2, name: 'Lauf 2'},
-        {id: 3, name: 'Lauf 3'},
-        {id: 4, name: 'Lauf 4'},
-        {id: 5, name: 'Lauf 5'}
-    ],
+    racesToCountNames: [],
     racesToCount:[],
     onSelectedPackChange:function(){
         console.log('racesToCount', this.get('racesToCount'));
     }.observes('racesToCount.length'),
 
     lastRace: 0,
-    minRaces: 0,
+    minRaces: '',
 
     filtersn: '',
     changed: false,
-
+    init: function () {
+        var n = App.get('NUMBER_RACES');
+        for (var i = 1; i <= n; i++) {
+            this.get('racesToCountNames').push(
+                {name: i + ". Lauf", id: i});
+        }
+    },
     groupedResults: function () {
         return App.get('utils').processWinners(
             this.get('filteredContent'),

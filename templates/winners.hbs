@@ -1,26 +1,32 @@
-<div id="menu" class="well well-sm">
+<div id="winnersMenu1" class="well well-sm menu">
     <div id="login">
         Anmelden:
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
+    Klasse:
+    {{input class='input' type="text" placeholder='Klasse' value=filtersn}}
 
-    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
-    {{input type="text" placeholder='Mindestanzahl Läufe' value=minRaces}}
+    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    {{#if admin}}
+        &nbsp;
+        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
+    {{/if}}
+</div>
+
+<div id="winnersMenu2" class="well well-sm menu">
+    Mindestanzahl Läufe:
+    {{input class='input' type="text" placeholder='Alle' value=minRaces}}
+    &nbsp;{{input type="checkbox" checked=LastRace}} Letzer Lauf gefahren
     {{view "Ember.Select"
         multiple="true"
     content=racesToCountNames
     optionValuePath="content.id"
     optionLabelPath="content.name"
     selectionBinding="racesToCount"}}
+    Gewertete Läufe:
     {{#each racesToCount}}
-        {{name}}
+        {{name}} -
     {{/each}}
-    &nbsp;{{input type="checkbox" checked=LastRace}} Letzer Lauf gefahren
-    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
-    {{#if admin}}
-        &nbsp;
-        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
-    {{/if}}
 </div>
 
 <table class="table table-striped table-hover lapTable verticalmiddle">

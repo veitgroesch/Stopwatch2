@@ -1,11 +1,12 @@
-<div id="menu" class="well well-sm">
+<div id="lapMenu" class="well well-sm menu">
     <div id="login">
         Anmelden:
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
-
-    {{input type="text" placeholder='Klasse filtern' value=filtersn}}
-    {{input type="text" placeholder='Lauf filtern' value=filterlauf}}
+    Klasse:
+    {{input class='input' type="text" placeholder='Klasse' value=filtersn}}
+     Lauf:
+    {{input class='input' type="text" placeholder='Lauf' value=filterlauf}}
     &nbsp;{{input type="checkbox" checked=tbodyLineBreak}} Zeilenumbruch
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     &nbsp;{{input type="checkbox" checked=sortByDelta}} Nach Delta sortieren
