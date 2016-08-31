@@ -15,11 +15,11 @@
     {{/if}}
 </div>
 
-<table class="table table-striped table-hover lapTable">
+<table class="table table-hover lapTable">
 
     <tbody {{bind-attr class=tbodyClass}}>
     {{#each result in groupedResults}}
-        <tr>
+        <tr {{bind-attr class=result.rowBackgroundClass}}>
             <td class="startnummer"><strong>{{result.startnummer}}</strong></td>
             {{#each lap in result.laps}}
                 {{#unless lap.empty}}

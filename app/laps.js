@@ -179,7 +179,6 @@ App.LapsController = Ember.ArrayController.extend({
                 var that = this;
                 var token = item.get('token');
                 var lap = this.store.find('lap').then(function (laps) {
-                    console.log('laps', laps);
                     laps.filterBy('token', token).forEach(function(lap){
                         if (lap.get('error') === 1) {
                             lap.set('error', 0);
@@ -197,7 +196,6 @@ App.LapsController = Ember.ArrayController.extend({
                 var that = this;
                 var token = item.get('token');
                 var lap = this.store.find('lap').then(function (laps) {
-                    console.log('laps', laps);
                     laps.filterBy('token', token).forEach(function(lap){
                         if (lap.get('abort') === 1) {
                             lap.set('abort', 0);

@@ -85,6 +85,17 @@
     font-size: 150%;
 }
 
+.lapTable tr.rowBackgroundOK {
+
+}
+
+.lapTable tr.rowBackgroundError {
+    background-color: #ff8888 !important;
+}
+
+.lapTable tr.rowBackgroundAbort {
+    background-color: #9bA47c !important;
+}
 /* Stopwatch */
 
 #nlauf {
