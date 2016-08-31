@@ -50,5 +50,4 @@ App.WatchesController = Ember.ArrayController.extend({
             toDelete.save();
         }
     }
-})
-;
+});

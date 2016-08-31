@@ -34,6 +34,15 @@
     width: 120px;
 }
 
+/* winners */
+
+select[multiple] {
+    height: 42px !important;
+    margin-bottom: -12px;
+}
+
+/* Messungen */
+
 .lapTable .group {
     /*background-color: rgb(255, 251, 153) !important;*/
     text-align: center;

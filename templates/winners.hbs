@@ -5,8 +5,17 @@
     </div>
 
     {{input type="text" placeholder='Klasse filtern' value=filtersn}}
-    {{input type="checkbox" checked=lastRace}} Letzter Lauf gefahren
     {{input type="text" placeholder='Mindestanzahl Läufe' value=minRaces}}
+    {{view "Ember.Select"
+        multiple="true"
+    content=racesToCountNames
+    optionValuePath="content.id"
+    optionLabelPath="content.name"
+    selectionBinding="racesToCount"}}
+    {{#each racesToCount}}
+        {{name}}
+    {{/each}}
+    &nbsp;{{input type="checkbox" checked=LastRace}} Letzer Lauf gefahren
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
         &nbsp;
