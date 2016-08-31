@@ -145,11 +145,15 @@ App = Ember.Application.create({
                 if (!hasToken) {
                     var error = (item.get('error') === 1);
                     var abort = (item.get('abort') === 1);
+                    var rowBackgroundClass = "rowBackgroundOk";
+                    if (error) {rowBackgroundClass = "rowBackgroundError";}
+                    if (abort) {rowBackgroundClass = "rowBackgroundAbort";}
                     result.pushObject(Ember.Object.create({
                         token: token,
                         startnummer: startnummer,
                         error: error,
                         abort: abort,
+                        rowBackgroundClass: rowBackgroundClass,
                         laps: []
                     }));
                 }
@@ -184,7 +188,6 @@ App = Ember.Application.create({
                 }
                 race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
             });
-//            console.log('result', result);
             if (sortByDelta) {
                 return result.sortBy('meanDelta');
             } else {
