@@ -36,12 +36,18 @@
                                 class="btn btn-primary" {{action 'lap'}}>{{startnummer}}</button>
                     {{else}}
                         {{#if startnummerEingegeben}}
-                            <button class="background-green"
-                                    class="btn btn-primary" {{action 'start'}}>{{startnummer}}</button>
+                            {{#if ready}}
+                                <button class="background-green"
+                                        class="btn btn-primary" {{action 'start'}}>{{startnummer}}</button>
+                            {{else}}
+                                <button class="background-red"  disabled="true" {{bind-attr disabled="lapButtonDisabled"}}
+                                        class="btn btn-primary">{{startnummer}}</button>
+                            {{/if}}
                         {{else}}
-                            <button class="background-red"  disabled="true"
+                            <button class="background-red"  disabled="true" {{bind-attr disabled="lapButtonDisabled"}}
                                     class="btn btn-primary">{{startnummer}}</button>
                         {{/if}}
+
                         </button>
                     {{/if}}
                 </div>

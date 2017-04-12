@@ -23,21 +23,18 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'classicmotordays2016'
+    database: 'classicmotordays2017'
 });
 
-
-//selbstgeschriebene logging middleware
+// logging middleware
 app.use(function (req, res, next) {
     console.log(req.method + ' ' + req.url);
     next();
 })
 
-
 // register middleware
 app.use('/', express.static(path.join(__dirname, '..')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
