@@ -105,7 +105,7 @@ App = Ember.Application.create({
             });
             return result.sortBy('group');
         },
-        processWinners: function (filteredContent, lastRace, minRaces) {
+        processWinners: function (filteredContent, lastRace, minRaces, racesToCount) {
             var result = [];
             filteredContent.forEach(function (item) {
                 // group data on Startnummer
@@ -123,13 +123,90 @@ App = Ember.Application.create({
                         velocity: 0,
                         filename: '',
                         nRaces: 0,
-                        LastRace: false,
-                        races: []
+                        lastRace: false,
+                        error: false,
+                        errorMessage: '',
+                        laps: []
                     }));
                 }
-                result.findBy('startnummer', startnummer).get('races').pushObject(item);
+                result.findBy('startnummer', startnummer).get('laps').pushObject(item);
             });
+            // Gleich Token in laps zu races bündeln
+            result.forEach(function(car) {
+                // Gleich Token in laps zu races bündeln
+                car.set('races', []);
+                car.get('laps').forEach(function(lap){
+                    var token = lap.get('token');
+                    if (!car.get('races').findBy('token', token)){
+                        var error = (lap.get('error') === 1);
+                        var abort = (lap.get('abort') === 1);
+                        var lauf = lap.get('nlauf');
+                        car.get('races').pushObject(Ember.Object.create({
+                            token: token,
+                            error: error,
+                            abort: abort,
+                            lauf: lauf,
+                            meanDelta: 0,
+                            laps: [],
+                            velocity: 0
+                        }));
+                    }
+                    car.get('races').findBy('token', token).get('laps').pushObject(lap);
+                });
+                delete car.laps;
+                // Deltas und v berechnen:
+                car.get('races').forEach(function (race) {
+                    App.get('utils').calculateDelta(race);
+                    delete race.laps;
+                });
+                // Testen, ob die Bedingungen erfüllt sind
+
+
+
+
+
+            });
+
+            // Races kalkulieren: Bedingungen erfüllt und Delta, v berechnen
+            console.log('processWinners', result);
             return result;
+        },
+        calculateDelta: function(race) {
+            race.set('laps', race.get('laps').sortBy('date'));
+            var setzrunde = 0;
+            var m = 0; // number items for display
+            var sumDelta = 0;
+            var nDelta = 0;
+            var sumTime = 0;
+            var nTime = 0;
+
+            race.get('laps').forEach(function (item) {
+                var isSetzrunde = false;
+                m++;
+                if (item.get('gueltig') && setzrunde === 0) {
+                    setzrunde = item.get('laptime');
+                    isSetzrunde = true;
+                }
+                var delta = Math.round((item.get('laptime') - setzrunde) * 10) / 10;
+                item.set('delta', delta);
+                item.set('isSetzrunde', isSetzrunde);
+                if (item.get('gueltig') && !isSetzrunde) {
+                    sumDelta += Math.abs(delta);
+                    nDelta++;
+                }
+                if (item.get('gueltig')) {
+                    sumTime += item.get('laptime');
+                    nTime++;
+                }
+            });
+            for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
+                race.get('laps').pushObject(Ember.Object.create({
+                    empty: true
+                }));
+            }
+            race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
+            race.set('velocity', Math.round(App.get('LENGTH_COURSE') / sumTime * 3.6));
+            return race;
         },
         processLaps: function (filteredContent, sortByDelta) {
             var result = [];
@@ -160,34 +237,9 @@ App = Ember.Application.create({
                 result.findBy('token', token).get('laps').pushObject(item);
             });
             result.forEach(function (race) {
-                race.set('laps', race.get('laps').sortBy('date'));
-                var setzrunde = 0;
-                var m = 0; // number items for display
-                var sumDelta = 0;
-                var nDelta = 0;
-
-                race.get('laps').forEach(function (item) {
-                    var isSetzrunde = false;
-                    m++;
-                    if (item.get('gueltig') && setzrunde === 0) {
-                        setzrunde = item.get('laptime');
-                        isSetzrunde = true;
-                    }
-                    var delta = Math.round((item.get('laptime') - setzrunde) * 10) / 10;
-                    item.set('delta', delta);
-                    item.set('isSetzrunde', isSetzrunde);
-                    if (item.get('gueltig') && !isSetzrunde) {
-                        sumDelta += Math.abs(delta);
-                        nDelta++;
-                    }
-                });
-                for (var i = 0; i < App.get('NUMBER_LAPS') - m + 1; i++) {
-                    race.get('laps').pushObject(Ember.Object.create({
-                        empty: true
-                    }));
-                }
-                race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
+                App.get('utils').calculateDelta(race);
             });
+
             if (sortByDelta) {
                 return result.sortBy('meanDelta');
             } else {

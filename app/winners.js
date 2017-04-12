@@ -15,8 +15,8 @@ App.WinnersController = Ember.ArrayController.extend({
         console.log('racesToCount', this.get('racesToCount'));
     }.observes('racesToCount.length'),
 
-    lastRace: 0,
-    minRaces: '',
+    lastRace: false,
+    minRaces: '0',
 
     filtersn: '',
     changed: false,
@@ -30,6 +30,8 @@ App.WinnersController = Ember.ArrayController.extend({
     groupedResults: function () {
         return App.get('utils').processWinners(
             this.get('filteredContent'),
+            this.get('lastRace'),
+            this.get('minRaces'),
             this.get('racesToCount'));
     }.property('filteredContent'),
 
@@ -44,7 +46,7 @@ App.WinnersController = Ember.ArrayController.extend({
                 return lap.get('startnummer').substring(0, 1).match(rxsn);
             });
         }
-    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed'),
+    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'racesToCount.length'),
 
     actions: {
         createCSV: function () {

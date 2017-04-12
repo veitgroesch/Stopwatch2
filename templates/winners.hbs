@@ -16,13 +16,14 @@
 <div id="winnersMenu2" class="well well-sm menu">
     Mindestanzahl Läufe:
     {{input class='input' type="text" placeholder='Alle' value=minRaces}}
-    &nbsp;{{input type="checkbox" checked=LastRace}} Letzer Lauf gefahren
+    &nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=lastRace}} Letzer Lauf gefahren
+    &nbsp;&nbsp;&nbsp;
     {{view "Ember.Select"
         multiple="true"
-    content=racesToCountNames
-    optionValuePath="content.id"
-    optionLabelPath="content.name"
-    selectionBinding="racesToCount"}}
+        content=racesToCountNames
+        optionValuePath="content.id"
+        optionLabelPath="content.name"
+        selectionBinding="racesToCount"}}
     Gewertete Läufe:
     {{#each racesToCount}}
         {{name}} -

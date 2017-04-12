@@ -37,7 +37,7 @@
 /* winners */
 
 #winnersMenu2 select[multiple] {
-    height: 42px !important;
+    height: 60px !important;
     width: 80px;
     margin-bottom: -12px;
 }
