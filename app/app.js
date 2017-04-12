@@ -122,8 +122,6 @@ App = Ember.Application.create({
                         delta: 0,
                         velocity: 0,
                         filename: '',
-                        nRaces: 0,
-                        lastRace: false,
                         error: false,
                         errorMessage: '',
                         laps: []
@@ -160,14 +158,51 @@ App = Ember.Application.create({
                     delete race.laps;
                 });
                 // Testen, ob die Bedingungen erfüllt sind
-
-
-
-
-
+                var nRaces = 0;
+                var lastRaceDriven = false;
+                var sumDelta = 0;
+                var sumVelocity = 0;
+                var nDelta = 0;
+                var lastRaceLauf = 0;
+                racesToCount.forEach(function(item){
+                    if (item.id > lastRaceLauf) {lastRaceLauf = item.id;}
+                });
+                car.get('races').forEach(function(race){
+                    if (race.get('lauf') == lastRaceLauf && !race.get('abort')) {
+                        lastRaceDriven = true;
+                    }
+                    if (racesToCount.findBy('id', race.get('lauf')) && !race.get('abort')){
+                        nRaces++;
+                        if (!race.get('error')) {
+                            nDelta++;
+                            sumDelta += race.get('meanDelta');
+                            sumVelocity += race.get('velocity');
+                        }
+                    }
+                });
+                if (nRaces < minRaces) {
+                    car.set('error', true);
+                    car.set('errorMessage', 'Zu wenige Läufe gefahren! ');
+                }
+                if (lastRace && !lastRaceDriven) {
+                    car.set('error', true);
+                    car.set('errorMessage', car.get('errorMessage') + 'Letzer Lauf nicht gefahren!');
+                }
+                if (car.get('error')) {
+                   car.set('delta', 100000);
+                } else {
+                    if (nDelta > 0) {
+                        car.set('delta', Math.round(sumDelta / nDelta * 10) / 10);
+                        car.set('velocity', Math.round(sumVelocity / nDelta));
+                    }
+                }
             });
-
-            // Races kalkulieren: Bedingungen erfüllt und Delta, v berechnen
+            //sortieren und Position einschreiben
+            result = result.sortBy('delta');
+            var pos = 1;
+            result.forEach(function(item){
+                item.set('position', pos++);
+            });
             console.log('processWinners', result);
             return result;
         },

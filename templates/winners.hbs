@@ -15,7 +15,7 @@
 
 <div id="winnersMenu2" class="well well-sm menu">
     Mindestanzahl Läufe:
-    {{input class='input' type="text" placeholder='Alle' value=minRaces}}
+    {{input class='input' type="text" placeholder='0' value=minRaces}}
     &nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=lastRace}} Letzer Lauf gefahren
     &nbsp;&nbsp;&nbsp;
     {{view "Ember.Select"
@@ -23,7 +23,8 @@
         content=racesToCountNames
         optionValuePath="content.id"
         optionLabelPath="content.name"
-        selectionBinding="racesToCount"}}
+        selectionBinding="racesToCount"
+    }}
     Gewertete Läufe:
     {{#each racesToCount}}
         {{name}} -
@@ -52,17 +53,23 @@
             <td class="startnummer"><strong>{{car.name}}</strong></td>
             <td class="startnummer"><strong>{{car.car}}</strong></td>
             <td class="startnummer"><strong>{{car.year}}</strong></td>
-            <td>
-                <strong>&#916; = {{car.delta}}&nbsp;s</strong>
-            </td>
-            <td>
-                <strong>v = {{car.velocity}}&nbsp;km/h</strong>
-            </td>
-            <td class="winnerImage">
-                {{#if car.filename}}
-                    <img width="150" {{bind-attr src=car.filename}}>
-                {{/if}}
-            </td>
+            {{#if car.error}}
+                <td colspan="3">
+                    <strong>{{car.errorMessage}}</strong>
+                </td>
+            {{else}}
+                <td>
+                    <strong>&#916; = {{car.delta}}&nbsp;s</strong>
+                </td>
+                <td>
+                    <strong>v = {{car.velocity}}&nbsp;km/h</strong>
+                </td>
+                <td class="winnerImage">
+                    {{#if car.filename}}
+                        <img width="150" {{bind-attr src=car.filename}}>
+                    {{/if}}
+                </td>
+            {{/if}}
         </tr>
     {{/each}}
     </tbody>
