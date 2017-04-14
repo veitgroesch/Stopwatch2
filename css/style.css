@@ -44,6 +44,17 @@
 #winnersMenu1 .input, #winnersMenu2 .input, #lapMenu .input{
     width: 70px;
 }
+
+#winnersTable .tdError {
+    background-color: #ff9999;
+}
+
+#winnersTable .winnerLapsDiv{
+    color: #374e0c;
+    font-size: 18px;
+    font-weight: normal;
+    display: none;
+}
 /* Messungen */
 
 .lapTable .group {

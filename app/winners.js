@@ -33,7 +33,6 @@ App.WinnersController = Ember.ArrayController.extend({
         }
     },
     groupedResults: function () {
-        console.log('racesToCount)', this.get('racesToCount'));
         return App.get('utils').processWinners(
             this.get('filteredContent'),
             this.get('lastRace'),

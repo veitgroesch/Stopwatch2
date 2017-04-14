@@ -156,6 +156,12 @@ App = Ember.Application.create({
                 car.get('races').forEach(function (race) {
                     App.get('utils').calculateDelta(race);
                     delete race.laps;
+                    //Markieren, ob race gewertet wird
+                    if (racesToCount.findBy('id', race.get('lauf'))) {
+                        race.set('inWertung', true);
+                    } else {
+                        race.set('inWertung', false);
+                    }
                 });
                 // Testen, ob die Bedingungen erfüllt sind
                 var nRaces = 0;
@@ -171,7 +177,7 @@ App = Ember.Application.create({
                     if (race.get('lauf') == lastRaceLauf && !race.get('abort')) {
                         lastRaceDriven = true;
                     }
-                    if (racesToCount.findBy('id', race.get('lauf')) && !race.get('abort')){
+                    if (race.get('inWertung') && !race.get('abort')){
                         nRaces++;
                         if (!race.get('error')) {
                             nDelta++;
@@ -214,6 +220,7 @@ App = Ember.Application.create({
             var nDelta = 0;
             var sumTime = 0;
             var nTime = 0;
+            var errorMessage = "";
 
             race.get('laps').forEach(function (item) {
                 var isSetzrunde = false;
@@ -239,7 +246,9 @@ App = Ember.Application.create({
                     empty: true
                 }));
             }
-            race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
+            if (nDelta > 0){
+                race.set('meanDelta', Math.round(sumDelta / nDelta * 10) / 10);
+            }
             race.set('velocity', Math.round(App.get('LENGTH_COURSE') / sumTime * 3.6));
             return race;
         },

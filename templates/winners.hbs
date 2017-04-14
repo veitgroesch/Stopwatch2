@@ -9,9 +9,23 @@
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     {{#if admin}}
         &nbsp;
-        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>
-    {{/if}}
+        <button id="buttonToggleRunden" class="btn btn-primary" onclick="toggleRunden();">Runden einblenden</button>
+        &nbsp;
+        <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>   {{/if}}
 </div>
+
+<script>
+    function toggleRunden() {
+        b = document.getElementById('buttonToggleRunden');
+        if (b.innerHTML == "Runden ausblenden") {
+            $('.winnerLapsDiv').hide();
+            b.innerHTML = "Runden einblenden"
+        } else {
+            $('.winnerLapsDiv').show();
+            b.innerHTML = "Runden ausblenden"
+        }
+    }
+</script>
 
 <div id="winnersMenu2" class="well well-sm menu">
     Mindestanzahl Läufe:
@@ -31,7 +45,7 @@
     {{/each}}
 </div>
 
-<table class="table table-striped table-hover lapTable verticalmiddle">
+<table class="table table-striped table-hover lapTable verticalmiddle" id="winnersTable">
     <thead>
     <tr>
         <th></th>
@@ -49,12 +63,13 @@
     {{#each car in groupedResults}}
         <tr>
             <td class="startnummer"><strong>{{car.position}})</strong></td>
-            <td class="startnummer"><strong>{{car.startnummer}}</strong></td>
+
+            <td class="startnummer"><strong>{{car.startnummer}}</a></td>
             <td class="startnummer"><strong>{{car.name}}</strong></td>
             <td class="startnummer"><strong>{{car.car}}</strong></td>
             <td class="startnummer"><strong>{{car.year}}</strong></td>
             {{#if car.error}}
-                <td colspan="3">
+                <td class="tdError" colspan="3">
                     <strong>{{car.errorMessage}}</strong>
                 </td>
             {{else}}
@@ -70,6 +85,29 @@
                     {{/if}}
                 </td>
             {{/if}}
+        </tr>
+
+        <tr class="winnersLaps">
+            <td></td>
+            <td colspan="7">
+                <div class="winnerLapsDiv">
+                    {{#each race in car.races}}
+                        {{#if race.inWertung}}
+                            <strong>{{race.lauf}}. Lauf:&nbsp;</strong>
+                            {{#if race.abort}}
+                                Abgebrochen&nbsp;&nbsp;
+                            {{else}}
+                                {{#if race.error}}
+                                    Messfehler&nbsp;&nbsp;
+                                {{else}}
+                                    &#916; = {{race.meanDelta}}&nbsp;&nbsp;
+                                {{/if}}
+                            {{/if}}
+                        {{/if}}
+
+                    {{/each}}
+                </div>
+            </td>
         </tr>
     {{/each}}
     </tbody>
