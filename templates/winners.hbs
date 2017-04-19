@@ -7,25 +7,11 @@
     {{input class='input' type="text" placeholder='Klasse' value=filtersn}}
 
     &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    &nbsp;{{input type="checkbox" checked=showLaps}} Runden anzeigen
     {{#if admin}}
-        &nbsp;
-        <button id="buttonToggleRunden" class="btn btn-primary" onclick="toggleRunden();">Runden einblenden</button>
         &nbsp;
         <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>   {{/if}}
 </div>
-
-<script>
-    function toggleRunden() {
-        b = document.getElementById('buttonToggleRunden');
-        if (b.innerHTML == "Runden ausblenden") {
-            $('.winnerLapsDiv').hide();
-            b.innerHTML = "Runden einblenden"
-        } else {
-            $('.winnerLapsDiv').show();
-            b.innerHTML = "Runden ausblenden"
-        }
-    }
-</script>
 
 <div id="winnersMenu2" class="well well-sm menu">
     Mindestanzahl Läufe:
@@ -87,24 +73,27 @@
             {{/if}}
         </tr>
 
-        <tr class="winnersLaps">
+        <tr {{bind-attr class=winnerLapsClass}}>
             <td></td>
             <td colspan="7">
-                <div class="winnerLapsDiv">
+                <div>
                     {{#each race in car.races}}
                         {{#if race.inWertung}}
-                            <strong>{{race.lauf}}. Lauf:&nbsp;</strong>
-                            {{#if race.abort}}
-                                Abgebrochen&nbsp;&nbsp;
+                            <span class="inWertung">
+                        {{else}}
+                        <span class="nichtInWertung">
+                        {{/if}}
+                        <strong>{{race.lauf}}. Lauf:&nbsp;</strong>
+                        {{#if race.abort}}
+                            Abgebrochen&nbsp;&nbsp;
+                        {{else}}
+                            {{#if race.error}}
+                                Messfehler&nbsp;&nbsp;
                             {{else}}
-                                {{#if race.error}}
-                                    Messfehler&nbsp;&nbsp;
-                                {{else}}
-                                    &#916; = {{race.meanDelta}}&nbsp;&nbsp;
-                                {{/if}}
+                                &#916; = {{race.meanDelta}}&nbsp;&nbsp;
                             {{/if}}
                         {{/if}}
-
+                        </span>
                     {{/each}}
                 </div>
             </td>

@@ -9,6 +9,15 @@ App.WinnersController = Ember.ArrayController.extend({
     }.property('tbodyLargeFont'),
     tbodyLargeFont: true,
 
+    winnerLapsClass: 'winnerLapsTr',
+    winnerLapsCheckbox: function () {
+        if (this.get('showLaps')){
+            this.set('winnerLapsClass', '');
+        } else {
+            this.set('winnerLapsClass', 'winnerLapsTr');
+        }
+        return true;
+    }.observes('showLaps'),
 
     racesToCountNames: [],
     racesToCount:[],
@@ -27,7 +36,8 @@ App.WinnersController = Ember.ArrayController.extend({
                 {name: i + ". Lauf", id: i});
             this.set('racesToCount',[
                 this.get('racesToCountNames')[1],
-                this.get('racesToCountNames')[3],
+                this.get('racesToCountNames')[2],
+                this.get('racesToCountNames')[4],
                 this.get('racesToCountNames')[5]
             ]);
         }

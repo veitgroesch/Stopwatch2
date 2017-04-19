@@ -49,11 +49,20 @@
     background-color: #ff9999;
 }
 
-#winnersTable .winnerLapsDiv{
-    color: #374e0c;
+#winnersTable .winnerLapsTr{
+    display: none;
+}
+
+#winnersTable .inWertung{
+    color: #0b8012;
     font-size: 18px;
     font-weight: normal;
-    display: none;
+}
+
+#winnersTable .nichtInWertung{
+    color: #7e7e7e;
+    font-size: 18px;
+    font-weight: normal;
 }
 /* Messungen */
 
