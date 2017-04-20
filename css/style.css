@@ -51,12 +51,12 @@
     width: 70px;
 }
 
-#winnersMenu1 .inputClass {
+#winnersMenu1 .inputClass, #winnersMenu2 .inputClass {
     width: 25px;
     height: 25px;
 }
 
-#winnersMenu1 .radioGroup{
+#winnersMenu1 .radioGroup, #winnersMenu2 .radioGroup{
     display: inline;
     border: 2px solid #a6aab4;
     padding: 10px;

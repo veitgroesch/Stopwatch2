@@ -21,21 +21,18 @@
 </div>
 
 <div id="winnersMenu2" class="well well-sm menu">
-    Mindestanzahl Läufe:
-    {{input class='inputClass' type="text" placeholder='0' value=minRaces}}
-    &nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=lastRace}} Letzer Lauf gefahren
-    &nbsp;&nbsp;&nbsp;
-    {{view "Ember.Select"
-        multiple="true"
-        content=racesToCountNames
-        optionValuePath="content.id"
-        optionLabelPath="content.name"
-        selectionBinding="racesToCount"
-    }}
-    Gewertete Läufe:
-    {{#each racesToCount}}
-        {{name}} -
-    {{/each}}
+    <div class="radioGroup">
+        Mindestanzahl Läufe:
+        {{input class='inputClass' type="text" placeholder='0' value=minRaces}}
+        &nbsp;&nbsp;&nbsp; Letzter Lauf gefahren {{input type="checkbox" checked=lastRace}}
+    </div>
+    <div class="radioGroup">
+        Gewertete Läufe:
+        {{#each race in racesToCount}}
+            {{race.id}} {{input type="checkbox" checked=race.checked change=test }}&nbsp;&nbsp;&nbsp;
+        {{/each}}
+        <button class="btn btn-primary" {{action update}}>Update</button>
+    </div>
 </div>
 
 <div class="well well-sm headerWell">{{header}}</div>

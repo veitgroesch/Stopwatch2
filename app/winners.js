@@ -18,7 +18,6 @@ App.WinnersController = Ember.ArrayController.extend({
         }
     }.observes('showLaps'),
 
-    racesToCountNames: [],
     racesToCount:[],
     onSelectedPackChange:function(){
      }.observes('racesToCount.length'),
@@ -31,17 +30,16 @@ App.WinnersController = Ember.ArrayController.extend({
 
     filtersn: '',
     changed: false,
+
+
     init: function () {
         var n = App.get('NUMBER_RACES');
         for (var i = 1; i <= n; i++) {
-            this.get('racesToCountNames').push(
-                {name: i + ". Lauf", id: i});
-            this.set('racesToCount',[
-                this.get('racesToCountNames')[1],
-                this.get('racesToCountNames')[2],
-                this.get('racesToCountNames')[4],
-                this.get('racesToCountNames')[5]
-            ]);
+            var item = {id: i, "checked": false};
+            if (App.GEWERTETE_LAEUFE.contains(i)) {
+                item.checked = true;
+            }
+            this.get('racesToCount').push(item);
         }
     },
     groupedResults: function () {
@@ -90,12 +88,14 @@ App.WinnersController = Ember.ArrayController.extend({
         if (this.get('radioValue') === 'all') {
             return laps;
         }
-    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed',
-        'racesToCount.length', 'radioValue'),
+    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'radioValue'),
 
     actions: {
         radioChanged: function(value) {
             this.set('radioValue', value);
+        },
+        update: function(){
+            this.set('changed', true);
         },
         createCSV: function () {
             var data = [];

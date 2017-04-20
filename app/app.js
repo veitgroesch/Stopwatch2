@@ -7,6 +7,8 @@ App = Ember.Application.create({
     NUMBER_PICS: 3,  //Anzahl der Plätze mit Bild in der Siegerliste (-1 für alle)
     GROUPS_CARS: ['0', '5', '6', '7', '8', '9'],
     GROUPS_BIKES: ['1', '2', '3', '4'],
+    GEWERTETE_LAEUFE: [2, 3, 5, 6],
+
     winnerlist: [],
     utils: {
         getTotalList: function (filteredContent, numberPlaces) {
@@ -157,7 +159,7 @@ App = Ember.Application.create({
                     App.get('utils').calculateDelta(race);
                     delete race.laps;
                     //Markieren, ob race gewertet wird
-                    if (racesToCount.findBy('id', race.get('lauf'))) {
+                    if (racesToCount.findBy('id', race.get('lauf')).checked) {
                         race.set('inWertung', true);
                     } else {
                         race.set('inWertung', false);
