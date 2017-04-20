@@ -26,9 +26,7 @@ App.WinnersController = Ember.ArrayController.extend({
     lastRace: false,
     minRaces: '0',
 
-    radioClass: true,
-    radioCars: false,
-    radioBikes: false,
+    radioValue: 'class',
 
     filtersn: '',
     changed: false,
@@ -56,7 +54,7 @@ App.WinnersController = Ember.ArrayController.extend({
     filteredContent: function () {
         this.set('changed', false);
         var laps = this.get('arrangedContent');
-        if (this.get('radioClass')) {
+        if (this.get('radioValue') === 'class') {
             var rxsn = new RegExp(this.get('filtersn'), 'gi');
             if (this.get('filtersn') === "") {
                 return [];
@@ -66,25 +64,25 @@ App.WinnersController = Ember.ArrayController.extend({
                 });
             }
         }
-        if (this.get('radioBikes')) {
+        if (this.get('radioValue') === 'bikes') {
             return laps.filter(function (lap) {
                 return App.get('GROUPS_BIKES').indexOf(lap.get('startnummer').substring(0, 1)) !== -1;
             });
         }
-        if (this.get('radioCars')) {
+        if (this.get('radioValue') === 'cars') {
             return laps.filter(function (lap) {
                 return App.get('GROUPS_CARS').indexOf(lap.get('startnummer').substring(0, 1)) !== -1;
             });
         }
+        if (this.get('radioValue') === 'all') {
+            return laps;
+        }
     }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed',
-        'racesToCount.length', 'radioClass', 'radioCars', 'radioBikes'),
+        'racesToCount.length', 'radioValue'),
 
     actions: {
         radioChanged: function(value) {
-            this.set('radioClass', false);
-            this.set('radioCars', false);
-            this.set('radioBikes', false);
-            this.set(value, true);
+            this.set('radioValue', value);
         },
         createCSV: function () {
             var data = [];

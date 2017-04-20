@@ -47,6 +47,15 @@
 
 #winnersMenu1 .inputClass {
     width: 25px;
+    height: 25px;
+}
+
+#winnersMenu1 .radioGroup{
+    display: inline;
+    border: 2px solid #a6aab4;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 50px;
 }
 
 #winnersTable .tdError {

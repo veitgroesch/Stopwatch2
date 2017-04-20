@@ -3,21 +3,26 @@
         Anmelden:
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
-    &nbsp;<input type="radio" name="radiogroup" checked {{action "radioChanged" "radioClass" on="change" }}/>
-    Klasse:
-    {{input class='input' type="text" placeholder='Klasse' value=filtersn class="inputClass"}}
-    &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "radioCars" on="change" }}/> Autos
-    &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "radioBikes" on="change" }}/> Motorräder
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
-    &nbsp;{{input type="checkbox" checked=showLaps}} Runden anzeigen
+    <div class="radioGroup">
+        &nbsp;<input type="radio" name="radiogroup" checked {{action "radioChanged" "class" on="change" }}/>
+        Klasse:
+        {{input class='inputClass' type="text" placeholder='Klasse' value=filtersn }}
+        &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "cars" on="change" }}/> Autos
+        &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "bikes" on="change" }}/> Motorräder
+        &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "all" on="change" }}/> Alle
+    </div>
+
+    <div class="radioGroup">
+        {{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+        &nbsp;{{input type="checkbox" checked=showLaps}} Runden anzeigen
+    </div>
     {{#if admin}}
-        &nbsp;
         <button class="btn btn-primary" {{action createCSV}}>Übersicht speichern</button>   {{/if}}
 </div>
 
 <div id="winnersMenu2" class="well well-sm menu">
     Mindestanzahl Läufe:
-    {{input class='input' type="text" placeholder='0' value=minRaces}}
+    {{input class='inputClass' type="text" placeholder='0' value=minRaces}}
     &nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=lastRace}} Letzer Lauf gefahren
     &nbsp;&nbsp;&nbsp;
     {{view "Ember.Select"
