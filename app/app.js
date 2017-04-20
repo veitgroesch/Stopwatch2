@@ -590,7 +590,6 @@ App.Router.map(function () {
     this.resource('watches');
     this.resource('laps');
     this.resource('winners');
-    this.resource('totals');
 });
 
 
