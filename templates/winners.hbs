@@ -55,7 +55,11 @@
 
     {{#each car in groupedResults}}
         <tr>
-            <td class="strong"><strong>{{car.position}})</strong></td>
+            <td class="strong">
+                {{#unless car.error}}
+                    <strong>{{car.position}})</strong>
+                {{/unless}}
+            </td>
             <td class="strong"><strong>{{car.startnummer}}</strong></td>
             <td><strong>{{car.name}}</strong></td>
             <td><strong>{{car.car}}</strong></td>
