@@ -29,6 +29,12 @@
     line-height: 26px;
 }
 
+.headerWell {
+    font-size: 28px;
+    color: #31708f;
+    text-align: center;
+}
+
 .menu input[type="text"], .menu input[type="password"] {
     padding-left: 5px;
     width: 120px;

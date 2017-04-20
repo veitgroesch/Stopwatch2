@@ -27,6 +27,7 @@ App.WinnersController = Ember.ArrayController.extend({
     minRaces: '0',
 
     radioValue: 'class',
+    header: 'Klasse 1',
 
     filtersn: '',
     changed: false,
@@ -53,6 +54,18 @@ App.WinnersController = Ember.ArrayController.extend({
 
     filteredContent: function () {
         this.set('changed', false);
+        if (this.get('radioValue') === 'class') {
+            this.set('header', 'Klasse ' + this.get('filtersn'));
+        }
+        if (this.get('radioValue') === 'cars') {
+            this.set('header', 'Autos');
+        }
+        if (this.get('radioValue') === 'bikes') {
+            this.set('header', 'Motorräder');
+        }
+        if (this.get('radioValue') === 'all') {
+            this.set('header', 'Alle Fahrzeuge');
+        }
         var laps = this.get('arrangedContent');
         if (this.get('radioValue') === 'class') {
             var rxsn = new RegExp(this.get('filtersn'), 'gi');
