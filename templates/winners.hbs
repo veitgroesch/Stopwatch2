@@ -29,9 +29,10 @@
     <div class="radioGroup">
         Gewertete Läufe:
         {{#each race in racesToCount}}
-            {{race.id}} {{input type="checkbox" checked=race.checked change=test }}&nbsp;&nbsp;&nbsp;
+            {{race.id}}
+            {{input type="checkbox" checked=race.checked}}
+            &nbsp;&nbsp;&nbsp;
         {{/each}}
-        <button class="btn btn-primary" {{action update}}>Update</button>
     </div>
 </div>
 

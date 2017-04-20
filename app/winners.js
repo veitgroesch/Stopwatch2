@@ -22,8 +22,8 @@ App.WinnersController = Ember.ArrayController.extend({
     onSelectedPackChange:function(){
      }.observes('racesToCount.length'),
 
-    lastRace: false,
-    minRaces: '0',
+    lastRace: App.LETZTER_LAUF_GEFAHREN,
+    minRaces: App.MINDESTANZAHL_LAUEFE,
 
     radioValue: 'class',
     header: 'Klasse 1',
@@ -31,9 +31,8 @@ App.WinnersController = Ember.ArrayController.extend({
     filtersn: '',
     changed: false,
 
-
     init: function () {
-        var n = App.get('NUMBER_RACES');
+        var n = App.NUMBER_RACES;
         for (var i = 1; i <= n; i++) {
             var item = {id: i, "checked": false};
             if (App.GEWERTETE_LAEUFE.contains(i)) {
@@ -42,6 +41,7 @@ App.WinnersController = Ember.ArrayController.extend({
             this.get('racesToCount').push(item);
         }
     },
+
     groupedResults: function () {
         return App.get('utils').processWinners(
             this.get('filteredContent'),
@@ -88,14 +88,11 @@ App.WinnersController = Ember.ArrayController.extend({
         if (this.get('radioValue') === 'all') {
             return laps;
         }
-    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'radioValue'),
+    }.property('racesToCount.@each.checked', 'minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'radioValue'),
 
     actions: {
         radioChanged: function(value) {
             this.set('radioValue', value);
-        },
-        update: function(){
-            this.set('changed', true);
         },
         createCSV: function () {
             var data = [];

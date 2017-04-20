@@ -8,6 +8,8 @@ App = Ember.Application.create({
     GROUPS_CARS: ['0', '5', '6', '7', '8', '9'],
     GROUPS_BIKES: ['1', '2', '3', '4'],
     GEWERTETE_LAEUFE: [2, 3, 5, 6],
+    LETZTER_LAUF_GEFAHREN: true,
+    MINDESTANZAHL_LAUEFE: '3',
 
     winnerlist: [],
     utils: {
