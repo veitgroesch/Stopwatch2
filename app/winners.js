@@ -96,20 +96,18 @@ App.WinnersController = Ember.ArrayController.extend({
         },
         createCSV: function () {
             var data = [];
-            var groups = this.get('groupedResults');
-            groups.forEach(function (group) {
-                    var klasse = group.get('group');
-                    group.get('cars').forEach(function (car) {
-                        var obj = {};
-                        obj['Klasse '] = klasse;
-                        obj['Startnummer '] = car.get('startnummer');
-                        obj['Name '] = car.get('name');
-                        obj['Auto '] = car.get('car');
-                        obj['Delta '] = car.get('delta');
-                        obj['Geschwindigkeit '] = car.get('velocity');
-                        data.push(obj);
-                    });
-                }
+            var result = this.get('groupedResults');
+            result.forEach(function (car) {
+                    var obj = {};
+                    obj['Position '] = car.get('position');
+                    obj['Startnummer '] = car.get('startnummer');
+                    obj['Fehler '] = car.get('errorMessage');
+                    obj['Name '] = car.get('name');
+                    obj['Auto '] = car.get('car');
+                    obj['Delta '] = car.get('delta');
+                    obj['Geschwindigkeit '] = car.get('velocity');
+                    data.push(obj);
+                 }
             );
             var currentDate = new Date();
             var dateTime = currentDate.getDate() + "." +
@@ -117,7 +115,7 @@ App.WinnersController = Ember.ArrayController.extend({
                 currentDate.getFullYear() + " " +
                 currentDate.getHours() + "." +
                 currentDate.getMinutes() + " Uhr";
-            var filename = 'Siegerliste CMD ' + dateTime;
+            var filename = 'Siegerliste CMD ' + this.get('header') + ' ' + dateTime;
             App.get('utils').createCSV(data, filename, true);
         },
         sortBy: function (property) {

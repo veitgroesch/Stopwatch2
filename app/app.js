@@ -115,7 +115,11 @@ App = Ember.Application.create({
             result = result.sortBy('delta');
             var pos = 1;
             result.forEach(function(item){
-                item.set('position', pos++);
+                if (!item.get('error')) {
+                    item.set('position', pos++);
+                } else {
+                    item.set('position', '-');
+                }
             });
             return result;
         },
