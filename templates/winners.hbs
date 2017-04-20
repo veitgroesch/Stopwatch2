@@ -3,10 +3,12 @@
         Anmelden:
         {{input type='password' value=password placeholder="Passwort"}}
     </div>
+    &nbsp;<input type="radio" name="radiogroup" checked {{action "radioChanged" "radioClass" on="change" }}/>
     Klasse:
-    {{input class='input' type="text" placeholder='Klasse' value=filtersn}}
-
-    &nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
+    {{input class='input' type="text" placeholder='Klasse' value=filtersn class="inputClass"}}
+    &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "radioCars" on="change" }}/> Autos
+    &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "radioBikes" on="change" }}/> Motorräder
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{input type="checkbox" checked=tbodyLargeFont}} Große Schrift
     &nbsp;{{input type="checkbox" checked=showLaps}} Runden anzeigen
     {{#if admin}}
         &nbsp;
@@ -48,12 +50,11 @@
 
     {{#each car in groupedResults}}
         <tr>
-            <td class="startnummer"><strong>{{car.position}})</strong></td>
-
-            <td class="startnummer"><strong>{{car.startnummer}}</a></td>
-            <td class="startnummer"><strong>{{car.name}}</strong></td>
-            <td class="startnummer"><strong>{{car.car}}</strong></td>
-            <td class="startnummer"><strong>{{car.year}}</strong></td>
+            <td class="strong"><strong>{{car.position}})</strong></td>
+            <td class="strong"><strong>{{car.startnummer}}</strong></td>
+            <td><strong>{{car.name}}</strong></td>
+            <td><strong>{{car.car}}</strong></td>
+            <td><strong>{{car.year}}</strong></td>
             {{#if car.error}}
                 <td class="tdError" colspan="3">
                     <strong>{{car.errorMessage}}</strong>
@@ -81,7 +82,7 @@
                         {{#if race.inWertung}}
                             <span class="inWertung">
                         {{else}}
-                        <span class="nichtInWertung">
+                            <span class="nichtInWertung">
                         {{/if}}
                         <strong>{{race.lauf}}. Lauf:&nbsp;</strong>
                         {{#if race.abort}}

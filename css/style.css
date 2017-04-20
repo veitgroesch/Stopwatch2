@@ -45,6 +45,10 @@
     width: 70px;
 }
 
+#winnersMenu1 .inputClass {
+    width: 25px;
+}
+
 #winnersTable .tdError {
     background-color: #ff9999;
 }
@@ -111,7 +115,7 @@
     color: #31708f;
 }
 
-.lapTable td:nth-of-type(1) {
+.lapTable .strong {
     color: darkred;
     font-weight: bold;
     font-size: 150%;

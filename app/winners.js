@@ -16,7 +16,6 @@ App.WinnersController = Ember.ArrayController.extend({
         } else {
             this.set('winnerLapsClass', 'winnerLapsTr');
         }
-        return true;
     }.observes('showLaps'),
 
     racesToCountNames: [],
@@ -26,6 +25,10 @@ App.WinnersController = Ember.ArrayController.extend({
 
     lastRace: false,
     minRaces: '0',
+
+    radioClass: true,
+    radioCars: false,
+    radioBikes: false,
 
     filtersn: '',
     changed: false,
@@ -52,18 +55,37 @@ App.WinnersController = Ember.ArrayController.extend({
 
     filteredContent: function () {
         this.set('changed', false);
-        var rxsn = new RegExp(this.get('filtersn'), 'gi');
         var laps = this.get('arrangedContent');
-        if (this.get('filtersn') === "") {
-            return [];
-        } else {
+        if (this.get('radioClass')) {
+            var rxsn = new RegExp(this.get('filtersn'), 'gi');
+            if (this.get('filtersn') === "") {
+                return [];
+            } else {
+                return laps.filter(function (lap) {
+                    return lap.get('startnummer').substring(0, 1).match(rxsn);
+                });
+            }
+        }
+        if (this.get('radioBikes')) {
             return laps.filter(function (lap) {
-                return lap.get('startnummer').substring(0, 1).match(rxsn);
+                return App.get('GROUPS_BIKES').indexOf(lap.get('startnummer').substring(0, 1)) !== -1;
             });
         }
-    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'racesToCount.length'),
+        if (this.get('radioCars')) {
+            return laps.filter(function (lap) {
+                return App.get('GROUPS_CARS').indexOf(lap.get('startnummer').substring(0, 1)) !== -1;
+            });
+        }
+    }.property('minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed',
+        'racesToCount.length', 'radioClass', 'radioCars', 'radioBikes'),
 
     actions: {
+        radioChanged: function(value) {
+            this.set('radioClass', false);
+            this.set('radioCars', false);
+            this.set('radioBikes', false);
+            this.set(value, true);
+        },
         createCSV: function () {
             var data = [];
             var groups = this.get('groupedResults');

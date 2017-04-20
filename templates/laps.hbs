@@ -21,7 +21,7 @@
     <tbody {{bind-attr class=tbodyClass}}>
     {{#each result in groupedResults}}
         <tr {{bind-attr class=result.rowBackgroundClass}}>
-            <td class="startnummer"><strong>{{result.startnummer}}</strong></td>
+            <td class="strong"><strong>{{result.startnummer}}</strong></td>
             {{#each lap in result.laps}}
                 {{#unless lap.empty}}
                     {{#if lap.gueltig}}
