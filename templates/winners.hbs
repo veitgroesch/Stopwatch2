@@ -24,7 +24,14 @@
     <div class="radioGroup">
         Mindestanzahl Läufe:
         {{input class='inputClass' type="text" placeholder='0' value=minRaces}}
-        &nbsp;&nbsp;&nbsp; Letzter Lauf gefahren {{input type="checkbox" checked=lastRace}}
+    </div>
+    <div class="radioGroup">
+        Pflichtläufe:
+        {{#each race in mandatoryRaces}}
+            {{race.name}}
+            {{input type="checkbox" checked=race.checked}}
+            &nbsp;&nbsp;
+        {{/each}}
     </div>
     <div class="radioGroup">
         Gewertete Läufe:

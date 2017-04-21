@@ -7,14 +7,14 @@ App = Ember.Application.create({
     NUMBER_PICS: 3,  //Anzahl der Plätze mit Bild in der Siegerliste (-1 für alle)
     GROUPS_CARS: ['0', '5', '6', '7', '8', '9'],
     GROUPS_BIKES: ['1', '2', '3', '4'],
-    GEWERTETE_LAEUFE: [2, 3, 5, 6],
+    GEWERTETE_LAEUFE: [2, 3],
+    PFLICHT_LAEUFE: [],
     NAME_LAEUFE: ['T1', 'W1', 'W2', 'T2', 'W3', 'W4'],
-    LETZTER_LAUF_GEFAHREN: false,
     MINDESTANZAHL_LAUEFE: '0',
 
     winnerlist: [],
     utils: {
-        processWinners: function (filteredContent, lastRace, minRaces, racesToCount) {
+        processWinners: function (filteredContent, mandatoryRaces, minRaces, racesToCount) {
             var result = [];
             filteredContent.forEach(function (item) {
                 // group data on Startnummer
@@ -74,17 +74,13 @@ App = Ember.Application.create({
                 });
                 // Testen, ob die Bedingungen erfüllt sind
                 var nRaces = 0;
-                var lastRaceDriven = false;
                 var sumDelta = 0;
                 var sumVelocity = 0;
                 var nDelta = 0;
-                var lastRaceLauf = 0;
-                racesToCount.forEach(function(item){
-                    if (item.id > lastRaceLauf) {lastRaceLauf = item.id;}
-                });
+                var racesDriven = [];
                 car.get('races').forEach(function(race){
-                    if (race.get('lauf') == lastRaceLauf && !race.get('abort')) {
-                        lastRaceDriven = true;
+                    if(!race.get('abort')) {
+                        racesDriven.push(race.get('lauf'));
                     }
                     if (race.get('inWertung') && !race.get('abort')){
                         nRaces++;
@@ -99,11 +95,24 @@ App = Ember.Application.create({
                     car.set('error', true);
                     car.set('errorMessage', 'Zu wenige Läufe gefahren! ');
                 }
-                if (lastRace && !lastRaceDriven) {
+                if (nRaces === 0) {
                     car.set('error', true);
-                    car.set('errorMessage', car.get('errorMessage') + 'Letzer Lauf nicht gefahren!');
+                    car.set('errorMessage', car.get('errorMessage') + 'Kein Lauf gefahren!');
+                } else {
+                    var mandatoryRacesDriven = true;
+                    console.log('racesDriven', racesDriven);
+                    console.log('mandatoryRaces', mandatoryRaces);
+                    mandatoryRaces.forEach(function(item){
+                        if(!racesDriven.contains(item.id) && item.checked) {
+                            mandatoryRacesDriven = false;
+                        }
+                    });
+                    if (!mandatoryRacesDriven) {
+                        car.set('error', true);
+                        car.set('errorMessage', car.get('errorMessage') + 'Nicht alle Pflichtläufe gefahren!');
+                    }
                 }
-                if (car.get('error')) {
+                 if (car.get('error')) {
                    car.set('delta', 100000);
                 } else {
                     if (nDelta > 0) {

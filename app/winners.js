@@ -19,10 +19,8 @@ App.WinnersController = Ember.ArrayController.extend({
     }.observes('showLaps'),
 
     racesToCount:[],
-    onSelectedPackChange:function(){
-     }.observes('racesToCount.length'),
+    mandatoryRaces:[],
 
-    lastRace: App.LETZTER_LAUF_GEFAHREN,
     minRaces: App.MINDESTANZAHL_LAUEFE,
 
     radioValue: 'class',
@@ -39,13 +37,18 @@ App.WinnersController = Ember.ArrayController.extend({
                 item.checked = true;
             }
             this.get('racesToCount').push(item);
+            item = {id: i, checked: false, name: App.NAME_LAEUFE[i-1]};
+             if (App.PFLICHT_LAEUFE.contains(i)) {
+                item.checked = true;
+            }
+            this.get('mandatoryRaces').push(item);
         }
     },
 
     groupedResults: function () {
         return App.get('utils').processWinners(
             this.get('filteredContent'),
-            this.get('lastRace'),
+            this.get('mandatoryRaces'),
             this.get('minRaces'),
             this.get('racesToCount'));
     }.property('filteredContent'),
@@ -94,7 +97,7 @@ App.WinnersController = Ember.ArrayController.extend({
         if (this.get('radioValue') === 'all') {
             return laps;
         }
-    }.property('racesToCount.@each.checked', 'minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'radioValue'),
+    }.property('racesToCount.@each.checked', 'mandatoryRaces.@each.checked', 'minRaces', 'lastRace', 'arrangedContent', 'filtersn', 'content.length', 'changed', 'radioValue'),
 
     actions: {
         radioChanged: function(value) {
