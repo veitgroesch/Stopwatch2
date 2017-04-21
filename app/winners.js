@@ -34,7 +34,7 @@ App.WinnersController = Ember.ArrayController.extend({
     init: function () {
         var n = App.NUMBER_RACES;
         for (var i = 1; i <= n; i++) {
-            var item = {id: i, "checked": false};
+            var item = {id: i, checked: false, name: App.NAME_LAEUFE[i-1]};
             if (App.GEWERTETE_LAEUFE.contains(i)) {
                 item.checked = true;
             }
@@ -64,6 +64,12 @@ App.WinnersController = Ember.ArrayController.extend({
         if (this.get('radioValue') === 'all') {
             this.set('header', 'Alle Fahrzeuge');
         }
+        var that = this;
+        this.get('racesToCount').forEach(function(item) {
+            if (item.checked) {
+                that.set('header', that.get('header') + ' - ' + item.name);
+            }
+        });
         var laps = this.get('arrangedContent');
         if (this.get('radioValue') === 'class') {
             var rxsn = new RegExp(this.get('filtersn'), 'gi');

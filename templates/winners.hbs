@@ -6,7 +6,7 @@
     <div class="radioGroup">
         &nbsp;<input type="radio" name="radiogroup" checked {{action "radioChanged" "class" on="change" }}/>
         Klasse:
-        {{input class='inputClass' type="text" placeholder='Klasse' value=filtersn }}
+        {{input class='inputClass' type="text" maxlength="1" value=filtersn }}
         &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "cars" on="change" }}/> Autos
         &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "bikes" on="change" }}/> Motorräder
         &nbsp;<input type="radio" name="radiogroup" {{action "radioChanged" "all" on="change" }}/> Alle
@@ -29,9 +29,9 @@
     <div class="radioGroup">
         Gewertete Läufe:
         {{#each race in racesToCount}}
-            {{race.id}}
+            {{race.name}}
             {{input type="checkbox" checked=race.checked}}
-            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;
         {{/each}}
     </div>
 </div>
