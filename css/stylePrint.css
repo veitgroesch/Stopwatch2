@@ -185,3 +185,14 @@
     font-weight: 800;
 }
 
+#winnersTable .inWertung{
+    color: #0b8012;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#winnersTable .nichtInWertung{
+    color: #7e7e7e;
+    font-size: 12px;
+    font-weight: normal;
+}
