@@ -100,8 +100,6 @@ App = Ember.Application.create({
                     car.set('errorMessage', car.get('errorMessage') + 'Kein Lauf gefahren!');
                 } else {
                     var mandatoryRacesDriven = true;
-                    console.log('racesDriven', racesDriven);
-                    console.log('mandatoryRaces', mandatoryRaces);
                     mandatoryRaces.forEach(function(item){
                         if(!racesDriven.contains(item.id) && item.checked) {
                             mandatoryRacesDriven = false;
