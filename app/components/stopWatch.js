@@ -45,9 +45,6 @@ App.StopWatchComponent = Ember.Component.extend({
         if (this.get('flaps').length === 0){
             return false;
         }
-        if (this.get('flaps').length > App.get('NUMBER_LAPS')){
-            return true;
-        }
         var round0 = this.get('flaps')[0].laptime;
         var actRound = this.get('time');
         if (actRound < round0 * 0.7) {
@@ -134,12 +131,9 @@ App.StopWatchComponent = Ember.Component.extend({
             var newLapStr = JSON.stringify(newLap);
             this.sendAction('saveNewRecord', newLap);
             if (this.get('runde') === App.get('NUMBER_LAPS')) {
-                this.set('ready', true);
+                this.set('ready', false);
                 this.set('running', false);
                 return;
-            }
-            if (this.get('flaps').length >= App.get('NUMBER_LAPS')) {
-                this.set('startnummerEingegeben', false);
             }
             this.set('runde', this.get('runde') + 1);
             this.set('time', 0);
