@@ -26,7 +26,7 @@ App.StopWatchComponent = Ember.Component.extend({
         return !this.get('startnummerEingegeben');
     }.property('startnummerEingegeben'),
 
-       lapButtonBackground: function() {
+    lapButtonBackground: function() {
         if(this.get('lapButtonDisabled')) {
             return 'background-red';
         } else {
@@ -39,14 +39,14 @@ App.StopWatchComponent = Ember.Component.extend({
     }.property('runde'),
 
     lapButtonDisabled: function () {
-        if (!this.get('running') && !this.get('ready')) {
-            return true;
-        }
         if (!this.get('running') || this.get('ready')) {
             return true;
         }
         if (this.get('flaps').length === 0){
             return false;
+        }
+        if (this.get('flaps').length > App.get('NUMBER_LAPS')){
+            return true;
         }
         var round0 = this.get('flaps')[0].laptime;
         var actRound = this.get('time');
@@ -54,7 +54,7 @@ App.StopWatchComponent = Ember.Component.extend({
             return true;
         }
         return false;
-    }.property('running', 'flaps', 'time', 'ready'),
+    }.property('running', 'flaps.length', 'time', 'ready'),
 
     startnummer: '',
     flaps: function () {
@@ -138,7 +138,9 @@ App.StopWatchComponent = Ember.Component.extend({
                 this.set('running', false);
                 return;
             }
-
+            if (this.get('flaps').length >= App.get('NUMBER_LAPS')) {
+                this.set('startnummerEingegeben', false);
+            }
             this.set('runde', this.get('runde') + 1);
             this.set('time', 0);
         }
